@@ -86,7 +86,7 @@ const SectionEmpty = ({header}) => {
                     color: '#97A8E4',
                 }}
                 >
-                    Add books to read later!
+                    You haven't finished anything yet!
                 </Text>
             </View>
         )
@@ -100,7 +100,7 @@ const SectionEmpty = ({header}) => {
                     color: '#97A8E4',
                 }}
                 >
-                    You haven't finished anything yet!
+                    Add books to read later!
                 </Text>
             </View>
         )

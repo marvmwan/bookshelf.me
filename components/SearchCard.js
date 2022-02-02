@@ -6,6 +6,7 @@ import { COLORS, FONTS, icons } from '../constants';
 
 
 const SearchCard = ( {item, navigation} ) => {
+    const greyNext = require("../assets/icons/grey-next.png")
 
     const book = item.volumeInfo;
     const backupImage = 'https://www.pngmagic.com/product_images/solid-dark-grey-background.jpg';
@@ -91,7 +92,7 @@ const SearchCard = ( {item, navigation} ) => {
                     
                 </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 20}}>
-                    <Image source={icons.greyNext} style={{width: 10, height: 16, justifyContent: 'center'}}/>
+                    <Image source={greyNext} style={{width: 10, height: 16, justifyContent: 'center'}}/>
                 </View>
             </View>
         </TouchableOpacity>

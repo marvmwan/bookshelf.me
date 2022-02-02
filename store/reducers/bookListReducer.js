@@ -35,9 +35,9 @@ const bookReducer = (state = initalState, action) => {
         case DELETE_BOOK:
             return {
                 ...state,
-                bookshelf: state.bookshelf.filter((item) => {
+                bookshelf: state.bookshelf.filter((item) => 
                     item.id !== action.id
-                })
+                )
             }
         case START_READING:
             return {

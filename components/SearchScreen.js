@@ -58,7 +58,7 @@ const SearchScreen = ({ onPress, navigation }) => {
     
 
 
-    const handleSearchChange = debounce(async (query) => {
+    const handleSearchChange = debounce( async (query) => {
         setIsLoading(true);
         setTextSearch(query);
         if(query == ''){
@@ -111,7 +111,10 @@ const SearchScreen = ({ onPress, navigation }) => {
                     <TextInput
                         style={styles.searchBox}
                         placeholder='Search books, authors, etc...'
-                        onChangeText={(newText) => handleSearchChange(newText)}
+                        onChangeText={(newText) => {
+                            
+                            handleSearchChange(newText)
+                        }}
 
                     />
                     <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 7}}>
