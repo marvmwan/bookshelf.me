@@ -9,29 +9,29 @@ export const addBook = (book) => {
     )
 }
 
-export const deleteBook = (key) => {
+export const deleteBook = (id) => {
     return (
         {
             type: DELETE_BOOK,
-            key: key
+            id: id
         }
     )
 }
 
-export const startBook = (key) => {
+export const startBook = (book) => {
     return (
         {
             type: START_READING,
-            key: key
+            book: book
         }
     )
 }
 
-export const finishBook = (key) => {
+export const finishBook = (book) => {
     return (
         {
             type: FINISH_READING,
-            key: key
+            book: book
         }
     )
 }

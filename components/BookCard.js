@@ -3,6 +3,8 @@ import { TouchableOpacity, Image } from "react-native"
 
 
 const BookCard = ({ onPress, image }) => {
+    const gradient = 'https://gradients.mijo-design.com/public/uploads/files/z12.png';
+    const regThumbnail = image ? image.thumbnail : gradient;
 
 
     return (
@@ -11,7 +13,7 @@ const BookCard = ({ onPress, image }) => {
                 borderRadius: 10,
                 width: 148*(1.15),
                 height: 215*(1.15),
-                margin: 7,
+                marginBottom: 17.6,
                 shadowColor: '#000000',
                 shadowOffset: {width: 0, height: 4},
                 shadowRadius: 20,
@@ -26,7 +28,9 @@ const BookCard = ({ onPress, image }) => {
                     width: 148*(1.15),
                     height: 215*(1.15),
                 }}
-                source={image}
+                source={{
+                    uri: regThumbnail
+                }}
                 resizeMode='stretch'
             />
         </TouchableOpacity>

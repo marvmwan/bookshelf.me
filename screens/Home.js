@@ -5,7 +5,8 @@ import {
     Image,
     StyleSheet,
     StatusBar,
-    FlatList
+    FlatList,
+    ScrollView
 } from 'react-native';
 
 import { useSelector } from 'react-redux';
@@ -94,26 +95,41 @@ const Home = ({ navigation }) => {
         return (
             <View
                 style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
+                    flex: 1,
                     backgroundColor: "#FFFFFF"
                 }}
             >
-                <FlatList
-                    data={bookshelf}
-                    renderItem={({ item, index, separators }) => <BookList key={item.id} header={ item.header } books={ item.data } /> }
-                    ItemSeparatorComponent={({ highlighted }) => (<ItemSeparator/>) }
-                    numColumns={1}
-                    keyExtractor={( item ) => item.id}
-                    ListHeaderComponent={<Header navigation={navigation} onPress={() => setSearchOn(true)}/>}
-                    ListEmptyComponent={<EmptyBookshelf/>}
-                />
+                <ScrollView >
+                    <Header navigation={navigation} onPress={() => setSearchOn(true)}/>
+                    {bookshelf.length ? <BookList bookshelf={bookshelf} navigation={navigation}/> : <EmptyBookshelf/>}
+                
+                </ScrollView>
                 <AddButton onPress={() => {setSearchOn(true)}} />
             </View>  
         )
+        // return (
+        //     <View
+        //         style={{
+        //             position: 'absolute',
+        //             top: 0,
+        //             left: 0,
+        //             right: 0,
+        //             bottom: 0,
+        //             backgroundColor: "#FFFFFF"
+        //         }}
+        //     >
+        //         <FlatList
+        //             data={bookshelf}
+        //             renderItem={({ item, index, separators }) => <BookList key={item.id} header={ item.header } books={ item.data } /> }
+        //             ItemSeparatorComponent={({ highlighted }) => (<ItemSeparator/>) }
+        //             numColumns={1}
+        //             keyExtractor={( item ) => item.id}
+        //             ListHeaderComponent={<Header navigation={navigation} onPress={() => setSearchOn(true)}/>}
+        //             ListEmptyComponent={<EmptyBookshelf/>}
+        //         />
+        //         <AddButton onPress={() => {setSearchOn(true)}} />
+        //     </View>  
+        // )
     } else {
         return (
             <View 

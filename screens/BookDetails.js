@@ -16,22 +16,25 @@ import CategoryTag from '../components/CategoryTag';
 
 import { COLORS, FONTS, icons } from '../constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { addBook, deleteBook } from '../store/actions/book';
+import { addBook, deleteBook, startBook, finishBook } from '../store/actions/book';
 
 const BookDetails = ({navigation, route }) => {
     const bookshelf = useSelector((state) => state.bookReducer.bookshelf);
     const book = route.params.item.volumeInfo;
+    const fullBook = route.params.item;
 
-    console.log(route.params.item);
     const dispatch = useDispatch();
 
-    const addNewBook = (book) => dispatch(addBook(book));
+    const addToShelf = (book) => dispatch(addBook(book));
+    const start = (id) => dispatch(startBook(id));
+    const finish = (id) => dispatch(finishBook(id));
     const deleteOldBook = (id) => dispatch(deleteBook(id));
 
     const backupImage = 'https://www.pngmagic.com/product_images/solid-dark-grey-background.jpg';
     const notAvailableImage = 'https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png';
     const gradient = 'https://gradients.mijo-design.com/public/uploads/files/z12.png';
 
+    const bookID = route.params.item.id;
     const title = book.title == undefined ? "Title not available" : book.title;
     const author = book.authors == undefined ? "Author not available" : book.authors[0];
     const description = book.description == undefined ? "Description not available" : book.description;
@@ -115,7 +118,15 @@ const BookDetails = ({navigation, route }) => {
                 
 
                 <View style={styles.buttonContainer}>
-                    <Button text={'Add book +'}/>
+                    {bookshelf.find(x => x.id === bookID) === undefined ?
+                        <Button text={'Add book +'} color={{backgroundColor: COLORS.blue }} onPress={() => addToShelf(fullBook)}/> :
+                        (bookshelf.find(x => x.id === bookID).inProgress === false && bookshelf.find(x => x.id === bookID).finished === false ? 
+                            <Button text={'Start book'} onPress={() => start(fullBook)} color={{backgroundColor: '#2ED348'}} /> :
+                            (bookshelf.find(x => x.id === bookID).finished ?
+                                <Button text={'Finished!'} onPress={() => console.log('finished!')} color={{backgroundColor: '#2ED348'}} /> :
+                                <Button text={'Finish book'} onPress={() => finish(fullBook)} color={{backgroundColor: '#2ED348'}} />))}
+
+                    {/* <Button text={'Add book +'} color={{backgroundColor: COLORS.blue }} onPress={() => console.log('add book +')}/> */}
                     <ButtonWithImage text={'Buy now'} icon={icons.externalLink} onPress={() => console.log('buy now')} />
                 </View>
 
@@ -164,6 +175,12 @@ const BookDetails = ({navigation, route }) => {
                         <Text style={styles.detailText}>{language}</Text>
                     </View>
                     
+                </View>
+                <View style={{alignItems: 'center', marginTop: 30}}>
+                    {bookshelf.find(x => x.id === bookID) === undefined ? 
+                        <View/> : 
+                        <Button text={'Delete book'} onPress={() => deleteOldBook(bookID)} color={{backgroundColor: '#ED1414'}} />
+                    }
                 </View>
             </ScrollView>
         </View>

@@ -126,7 +126,7 @@ const SearchScreen = ({ onPress, navigation }) => {
                 contentContainerStyle={{alignSelf:'center'}}
                 data={books}
                 renderItem={({item, index, separators}) => <SearchCard item={item} navigation={navigation}/>}
-                //ItemSeparatorComponent={({ highlighted }) => (<ItemSeparator/>) }
+                ListEmptyComponent={<Text>Loading...</Text>}
                 keyExtractor={( item ) => item.id}
                 ListHeaderComponent={<SectionHeaders header={"All books"}/>}
                 />
