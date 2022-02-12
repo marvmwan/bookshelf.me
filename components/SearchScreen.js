@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, TextInput, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, StatusBar, StyleSheet, TextInput, FlatList } from 'react-native';
 
-import { FONTS, COLORS, icons } from '../constants'
+import { FONTS, COLORS, icons, SIZES } from '../constants'
 import SearchCard from './SearchCard';
 
 
@@ -93,19 +93,27 @@ const SearchScreen = ({ onPress, navigation }) => {
         setIsLoading(false);
     }, 400)
 
-
+    console.log(SIZES.width)
 
 
 
     return (  
         <>
-            <View style={{backgroundColor: 'rgba(240,240,240, 0.87)', height: 110}}>
+            <StatusBar
+                animated={true}
+                backgroundColor="#61dafb"
+                barStyle={'dark-content'}
+                showHideTransition={'fade'}
+                //hidden={hidden} 
+            />
+            <View style={{backgroundColor: 'rgba(240,240,240, 0.87)', height: 110, alignSelf: 'center', width: SIZES.width}}>
                 <View
                     style={{
                         top: 60, 
-                        marginLeft: 14.7,
-                        width:358,
+                        // marginLeft: 14.7,
+                        width: SIZES.width*.95,
                         flexDirection: 'row',
+                        alignSelf: 'center'
                     }}
                 >
                     <TextInput
@@ -117,7 +125,7 @@ const SearchScreen = ({ onPress, navigation }) => {
                         }}
 
                     />
-                    <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 7}}>
+                    <View style={{justifyContent: 'center', alignItems: 'center', flex: .15, marginLeft: 5}}>
                         <TouchableOpacity onPress={onPress} activeOpacity={1}><Text>Cancel</Text></TouchableOpacity>
                     </View>
                 </View>
@@ -128,8 +136,8 @@ const SearchScreen = ({ onPress, navigation }) => {
                 style={{marginTop: 7}}
                 contentContainerStyle={{alignSelf:'center'}}
                 data={books}
-                renderItem={({item, index, separators}) => <SearchCard item={item} navigation={navigation}/>}
-                ListEmptyComponent={<Text>Loading...</Text>}
+                renderItem={({item}) => <SearchCard item={item} arrow={icons.greyNext} navigation={navigation}/>}
+                ListEmptyComponent={<View style={{width: SIZES.width*.9}}><Banner searchBox={textSearch}/></View>}
                 keyExtractor={( item ) => item.id}
                 ListHeaderComponent={<SectionHeaders header={"All books"}/>}
                 />
@@ -147,11 +155,11 @@ const SearchScreen = ({ onPress, navigation }) => {
         shadowRadius: 29,
         shadowOpacity: 1,
         height: 40,
-        width: 300,
         borderRadius: 7,
         alignItems: 'center',
         flexDirection: 'row',
-        paddingLeft: 10
+        paddingLeft: 10,
+        flex: .85
 
 
      }

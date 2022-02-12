@@ -14,8 +14,8 @@ const AddButton = ({onPress}) => {
                     height: 72, 
                     width: 72,
                     position: 'absolute',
-                    top: 710,
-                    left: 290,
+                    top: 730,
+                    left: 300,
                     justifyContent: 'center',
                     alignItems: 'center',
                     shadowColor: '#959DA5',
@@ -23,6 +23,7 @@ const AddButton = ({onPress}) => {
                     shadowRadius: 20,
                     shadowOpacity: 1,
                 }}
+                activeOpacity={.8}
             >
                 <Image source={icons.add} style={{ width: 29, height: 29 }} />
             </TouchableOpacity>

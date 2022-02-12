@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
@@ -6,10 +6,13 @@ import {
     StyleSheet,
     StatusBar,
     FlatList,
-    ScrollView
+    ScrollView,
+    SafeAreaView,
 } from 'react-native';
 
 import { useSelector } from 'react-redux';
+
+
 
 import { SearchBar } from "../components"
 import AddButton from '../components/AddButton';
@@ -19,13 +22,10 @@ import { COLORS, FONTS, bookData, icons } from '../constants';
 
 const Header = ({ onPress, navigation }) => {
     return (
-        <View style={{marginBottom: 80, top: 60, marginLeft: 14.7}}>
+        <View style={{marginBottom: 20, alignSelf: 'center', marginTop: 80}}>
             <Text
                 style={{
                     color: COLORS.blue,
-                    // position: 'absolute',
-                    //top: 60,
-                    //left: 27,
                     ...FONTS.largeTitle
                 }}
             >
@@ -43,15 +43,6 @@ const Header = ({ onPress, navigation }) => {
 }
 
 
-const ItemSeparator = () => {
-    return (
-        <View
-            style={{
-                height: 35
-            }}
-        />
-    )
-}
 
 const EmptyBookshelf = () => {
     return (
@@ -67,17 +58,6 @@ const EmptyBookshelf = () => {
             >
                 👋, add to your bookshelf!
             </Text>
-            <Image 
-                style={{
-                    width: 140,
-                    height: 140,
-                    transform: [{rotate: '290deg'}],
-                    position: 'absolute',
-                    top: 570,
-                    left: 150
-                }}
-                source={icons.arrow}
-            />
         </>
         
     )
@@ -87,12 +67,17 @@ const EmptyBookshelf = () => {
 const Home = ({ navigation }) => {
 
     const [searchOn, setSearchOn] = useState(false);
+    //const [fontsLoaded, setFontsLoaded] = useState(false);
 
     const bookshelf = useSelector((state) => state.bookReducer.bookshelf);
 
 
+    
+
+
     if(!searchOn) {
         return (
+            
             <View
                 style={{
                     flex: 1,
@@ -100,6 +85,13 @@ const Home = ({ navigation }) => {
                 }}
             >
                 <ScrollView >
+                    <StatusBar
+                        animated={true}
+                        backgroundColor="#61dafb"
+                        barStyle={'dark-content'}
+                        showHideTransition={'fade'}
+                        //hidden={hidden} 
+                    />
                     <Header navigation={navigation} onPress={() => setSearchOn(true)}/>
                     {bookshelf.length ? <BookList bookshelf={bookshelf} navigation={navigation}/> : <EmptyBookshelf/>}
                 
@@ -107,29 +99,6 @@ const Home = ({ navigation }) => {
                 <AddButton onPress={() => {setSearchOn(true)}} />
             </View>  
         )
-        // return (
-        //     <View
-        //         style={{
-        //             position: 'absolute',
-        //             top: 0,
-        //             left: 0,
-        //             right: 0,
-        //             bottom: 0,
-        //             backgroundColor: "#FFFFFF"
-        //         }}
-        //     >
-        //         <FlatList
-        //             data={bookshelf}
-        //             renderItem={({ item, index, separators }) => <BookList key={item.id} header={ item.header } books={ item.data } /> }
-        //             ItemSeparatorComponent={({ highlighted }) => (<ItemSeparator/>) }
-        //             numColumns={1}
-        //             keyExtractor={( item ) => item.id}
-        //             ListHeaderComponent={<Header navigation={navigation} onPress={() => setSearchOn(true)}/>}
-        //             ListEmptyComponent={<EmptyBookshelf/>}
-        //         />
-        //         <AddButton onPress={() => {setSearchOn(true)}} />
-        //     </View>  
-        // )
     } else {
         return (
             <View 

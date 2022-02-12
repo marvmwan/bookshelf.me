@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     View,
     Text,
@@ -6,8 +6,11 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-    FlatList
+    StatusBar
 } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
+
+
 
 import BackButton from '../components/BackButton';
 import Button from '../components/Button';
@@ -18,8 +21,15 @@ import { COLORS, FONTS, icons } from '../constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { addBook, deleteBook, startBook, finishBook } from '../store/actions/book';
 
+
+
+
+
+
 const BookDetails = ({navigation, route }) => {
     const bookshelf = useSelector((state) => state.bookReducer.bookshelf);
+
+
     const book = route.params.item.volumeInfo;
     const fullBook = route.params.item;
 
@@ -92,6 +102,13 @@ const BookDetails = ({navigation, route }) => {
         <>
         <View style={{flex: 1, backgroundColor: COLORS.white}}>
             <ScrollView contentContainerStyle={{alignSelf: 'center', width: 323}}>
+                <StatusBar
+                    animated={true}
+                    backgroundColor="#61dafb"
+                    barStyle={'dark-content'}
+                    showHideTransition={'fade'}
+                    //hidden={hidden} 
+                />
                 <View style={{flex:.1, marginBottom: 40}}>
                     <BackButton navigation={navigation} style={{marginLeft: -10, marginTop: 60}}/>
                 </View>
@@ -127,7 +144,7 @@ const BookDetails = ({navigation, route }) => {
                                 <Button text={'Finish book'} onPress={() => finish(fullBook)} color={{backgroundColor: '#2ED348'}} />))}
 
                     {/* <Button text={'Add book +'} color={{backgroundColor: COLORS.blue }} onPress={() => console.log('add book +')}/> */}
-                    <ButtonWithImage text={'Buy now'} icon={icons.externalLink} onPress={() => console.log('buy now')} />
+                    <ButtonWithImage text={'Buy now'} icon={icons.externalLink} onPress={() => WebBrowser.openBrowserAsync('https://www.amazon.com/s?k=' + ISBN)} />
                 </View>
 
                 <View style={{marginBottom: 40}}>
@@ -176,10 +193,12 @@ const BookDetails = ({navigation, route }) => {
                     </View>
                     
                 </View>
-                <View style={{alignItems: 'center', marginTop: 30}}>
-                    {bookshelf.find(x => x.id === bookID) === undefined ? 
+                <View style={{alignItems: 'center', marginTop: 30, marginBottom: 60}}>
+                    {bookshelf.find(x => x.id === bookID) === undefined ?
                         <View/> : 
-                        <Button text={'Delete book'} onPress={() => deleteOldBook(bookID)} color={{backgroundColor: '#ED1414'}} />
+                        <TouchableOpacity style={styles.deleteButton} onPress={() => deleteOldBook(bookID)} >
+                            <Text style={{color: '#ED1414', ...FONTS.body1}}>Delete book</Text>
+                        </TouchableOpacity>
                     }
                 </View>
             </ScrollView>
@@ -191,6 +210,18 @@ const BookDetails = ({navigation, route }) => {
 }
 
 const styles = StyleSheet.create({
+    deleteButton: {
+        borderRadius: 10, 
+        backgroundColor: COLORS.white,
+        height: 42, 
+        width: 323,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#959DA5',
+        shadowOffset: {width: 0, height: 7},
+        shadowRadius: 20,
+        shadowOpacity: .3,
+    },
     detailsContainer: {
         flexDirection: 'row',
         marginLeft: 0

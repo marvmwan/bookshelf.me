@@ -5,7 +5,7 @@ import { startDetecting } from 'react-native/Libraries/Utilities/PixelRatio';
 import { COLORS, FONTS, icons } from '../constants';
 
 
-const SearchCard = ( {item, navigation} ) => {
+const SearchCard = ( {item, navigation, arrow} ) => {
     const greyNext = require("../assets/icons/grey-next.png")
 
     const book = item.volumeInfo;
@@ -92,7 +92,7 @@ const SearchCard = ( {item, navigation} ) => {
                     
                 </View>
                 <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 20}}>
-                    <Image source={greyNext} style={{width: 10, height: 16, justifyContent: 'center'}}/>
+                    <Image  source={arrow} style={{width: 10, height: 16, justifyContent: 'center'}} />
                 </View>
             </View>
         </TouchableOpacity>

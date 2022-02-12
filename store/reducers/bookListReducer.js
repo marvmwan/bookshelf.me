@@ -1,9 +1,33 @@
 import { ADD_BOOK, DELETE_BOOK, START_READING, FINISH_READING, ADD_CATEGORY, DELETE_CATEGORY } from "../actions/types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
+
+
+// const getData = async () => {
+//     try {
+//         const jsonValue = await AsyncStorage.getItem('@storage_Key')
+//         return jsonValue != null ? JSON.parse(jsonValue) : null;
+//     } catch(e) {
+//         // error reading value
+//     }
+// }
 const initalState = {
     bookshelf: []
 }
+
+const getData = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('bookshelf');
+        return jsonValue != null ? JSON.parse(jsonValue) : initalState;
+    } catch(e) {
+        // error reading value
+        console.log(e);
+    }
+}
+
+
+
 
 
 const bookReducer = (state = initalState, action) => {
@@ -13,23 +37,23 @@ const bookReducer = (state = initalState, action) => {
                 return {
                     ...state,
                     bookshelf: state.bookshelf.concat({
-                    id: action.data.id,
-                    book: action.data,
-                    inProgress: false,
-                    finished: false,
-                    categories: [action.data.volumeInfo.categories[0]],
-                    })
+                        id: action.data.id,
+                        book: action.data,
+                        inProgress: false,
+                        finished: false,
+                        categories: [action.data.volumeInfo.categories[0]],
+                        })
                 }
             } else {
                 return {
                     ...state,
                     bookshelf: state.bookshelf.concat({
-                    id: action.data.id,
-                    book: action.data,
-                    inProgress: false,
-                    finished: false,
-                    categories: [],
-                    })
+                        id: action.data.id,
+                        book: action.data,
+                        inProgress: false,
+                        finished: false,
+                        categories: [],
+                        })
                 }
             }
         case DELETE_BOOK:
@@ -53,12 +77,12 @@ const bookReducer = (state = initalState, action) => {
             return {
                 ...state,
                 bookshelf: state.bookshelf.map(book => {
-                    if(book.id == action.book.id) {
-                        return {...book, inProgress: false, finished: true};
-                    }
-                    return book;
-                })
-            }
+                        if(book.id == action.book.id) {
+                            return {...book, inProgress: false, finished: true};
+                        }
+                        return book;
+                    })
+                }
         case ADD_CATEGORY:
             return;
         case DELETE_CATEGORY:

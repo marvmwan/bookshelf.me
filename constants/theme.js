@@ -63,6 +63,7 @@ export const FONTS = {
     body4: { fontFamily: "Rubik-Medium", fontSize: SIZES.body4, lineHeight: 22 },
     // Search bar text
     body5: { fontFamily: "Rubik-Light", fontSize: SIZES.body4, lineHeight: 22 },
+    body6: { fontFamily: "Rubik-Light", fontSize: SIZES.body3, lineHeight: 22 },
 };
 
 const appTheme = { COLORS, SIZES, FONTS };

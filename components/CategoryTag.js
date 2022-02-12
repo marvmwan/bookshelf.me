@@ -18,9 +18,8 @@ const styles = StyleSheet.create({
         ...FONTS.body1,
         color: COLORS.blue,
         alignSelf: 'center',
-        lineHeight: 0,
-        height: 20,
-        width: 'auto'
+        lineHeight: 22,
+        height: 22,
     },
     container: {
         borderRadius: 6,
