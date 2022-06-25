@@ -116,8 +116,8 @@ const BookDetails = ({navigation, route }) => {
                     <View style={styles.thumbnailContainer}>
                         <Image 
                             source={{
-                                uri: smallThumbnail,
-                                uri: regThumbnail
+                                uri: regThumbnail,
+                                uri: smallThumbnail
                             }}
                             style={styles.thumbnail}
                             resizeMode='stretch'

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
+import _ from 'lodash';
 import { View, TouchableOpacity, Text, StatusBar, StyleSheet, TextInput, FlatList } from 'react-native';
 
 import { FONTS, COLORS, icons, SIZES } from '../constants'
 import SearchCard from './SearchCard';
-
 
 
 const debounce = (fn, delay) => {
@@ -50,50 +50,132 @@ const Banner = (textSearch) => {
 
 let cancelToken;
 
+let tokenSource;
+
 const SearchScreen = ({ onPress, navigation }) => {
 
     const [textSearch, setTextSearch] = useState('');
+    const [searchQuery, setSearchQuery] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [books, setBooks] = useState([]);
+    const [errorMsg, setErrorMsg] = useState('');
     
-
-
-    const handleSearchChange = debounce( async (query) => {
-        setIsLoading(true);
+    
+    const onChange = (query) => {
         setTextSearch(query);
-        if(query == ''){
-            return;
+        
+        //setIsLoading(true);
+        const search = _.debounce(sendQuery, 500);
+
+        setSearchQuery(prevSearch => {
+          if (prevSearch.cancel) {
+            prevSearch.cancel();
+          }
+          return search;
+        });
+    
+        search(query);
+        //setIsLoading(false);
+      };
+    
+    const sendQuery = async value => {
+        setIsLoading(true);
+        const { cancelPrevQuery, result } = await fetchData(value);
+
+        if (cancelPrevQuery) return;
+
+        if (result !== undefined) {
+            setBooks(result);
+            setErrorMsg('');
+            setIsLoading(false);
+        } else {
+            setBooks([]);
+            setErrorMsg("There was an error. Try again");
+            console.log(errorMsg);
+            setIsLoading(false);
         }
-        const searchTerm = query
+    };
+
+    // const fetchData = (query) => {
+    // setIsLoading(true);
+    // setTextSearch(query);
+    // if(query == ''){
+    //     return;
+    // }
+    // const searchTerm = query;
+
+    // try {
+    //     const results =  await axios.get(
+    //         `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&printType=books&key=${API_KEY}`
+    //     )
+    //     .then( response => {
+    //         //console.log(response);
+    //         setBooks(response.data.items)
+    //     })
+    //     //console.log("Results for " + searchTerm + ": ", results.data)
+    // } catch (error) {
+    //     console.log(error);
+    //     setErrorMsg("There was an error. Try again");
+    // }
+    // setIsLoading(false);
 
 
-        //Check if there are any previous pending requests
-        if (cancelToken != undefined) {
-            console.log('api call canceled')
-            cancelToken.cancel("Operation canceled due to new request.")
-        }
+    // }
 
-        //Save the cancel token for the current request
-        cancelToken = axios.CancelToken.source()
-
-
+    const fetchData = async keyword => {
+        setTextSearch(keyword);
         try {
-            const results =  await axios.get(
-                `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&printType=books&key=AIzaSyCiQS2OJqWvr2_ysbwwnh_l0r_hj5Lp0ic`,
-                { cancelToken: cancelToken.token } //Pass the cancel token to the current request
-            )
-            .then( response => {
-                //console.log(response);
-                setBooks(response.data.items)
-            })
-            //console.log("Results for " + searchTerm + ": ", results.data)
-        } catch (error) {
-            console.log(error)
-        }
-        setIsLoading(false);
-    }, 400)
+            if (typeof tokenSource !== typeof undefined) {
+            tokenSource.cancel('Operation canceled due to new request.');
+            }
 
-    console.log(SIZES.width)
+            // save the new request for cancellation
+            tokenSource = axios.CancelToken.source();
+            axios.defaults.baseURL = 'https://bookshelf-api-proxy-server.herokuapp.com'
+            const { data } = await axios.get(`/api?q=${keyword}`, {
+            cancelToken: tokenSource.token
+            });
+
+            return { result: data.items };
+        } catch (err) {
+            if (axios.isCancel(err)) return { cancelPrevQuery: true };
+            return [err];
+        }
+    };
+    // const handleSearchChange = debounce( async (query) => {
+    //     setIsLoading(true);
+    //     setTextSearch(query);
+    //     if(query == ''){
+    //         return;
+    //     }
+    //     const searchTerm = query;
+
+
+    //     //Check if there are any previous pending requests
+    //     if (cancelToken != undefined) {
+    //         console.log('api call canceled');
+    //         cancelToken.cancel("Operation canceled due to new request.");
+    //     }
+
+    //     //Save the cancel token for the current request
+    //     cancelToken = axios.CancelToken.source()
+
+
+    //     try {
+    //         const results =  await axios.get(
+    //             `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&printType=books&key=AIzaSyCiQS2OJqWvr2_ysbwwnh_l0r_hj5Lp0ic`,
+    //             { cancelToken: cancelToken.token } //Pass the cancel token to the current request
+    //         )
+    //         .then( response => {
+    //             //console.log(response);
+    //             setBooks(response.data.items)
+    //         })
+    //         //console.log("Results for " + searchTerm + ": ", results.data)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    //     setIsLoading(false);
+    // }, 400)
 
 
 
@@ -119,11 +201,12 @@ const SearchScreen = ({ onPress, navigation }) => {
                     <TextInput
                         style={styles.searchBox}
                         placeholder='Search books, authors, etc...'
-                        onChangeText={(newText) => {
-                            
-                            handleSearchChange(newText)
+                        autoFocus
+                        onChangeText={(text) => {
+                            text = text.split(' ').join('+');
+                            onChange(text)
                         }}
-
+                        clearButtonMode={'always'}
                     />
                     <View style={{justifyContent: 'center', alignItems: 'center', flex: .15, marginLeft: 5}}>
                         <TouchableOpacity onPress={onPress} activeOpacity={1}><Text>Cancel</Text></TouchableOpacity>
@@ -139,7 +222,7 @@ const SearchScreen = ({ onPress, navigation }) => {
                 renderItem={({item}) => <SearchCard item={item} arrow={icons.greyNext} navigation={navigation}/>}
                 ListEmptyComponent={<View style={{width: SIZES.width*.9}}><Banner searchBox={textSearch}/></View>}
                 keyExtractor={( item ) => item.id}
-                ListHeaderComponent={<SectionHeaders header={"All books"}/>}
+                ListHeaderComponent={<SectionHeaders header={books.length !== 0 ? "All books" : ''}/>}
                 />
             )}
         </>
