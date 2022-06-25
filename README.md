@@ -2,7 +2,7 @@
 
 Book tracking apps suck.
 
-The UI is terrible and most have more features and informaton than anyone ever asked for, so I built bookshelf.
+The UI is terrible and most have more features and information than anyone ever asked for, so I built bookshelf.
 
 A clean and modern book tracking app to help readers keep track of what they have read, will read, and are currently reading. Hope you enjoy!
 
