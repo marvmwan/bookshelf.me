@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "bookshelf",
+    "name": "bookshelf.me",
     "slug": "bookshelf",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,8 +17,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "host.exp.exponent"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.mbogo.bookshelf"
     },
     "android": {
       "adaptiveIcon": {
