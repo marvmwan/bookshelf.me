@@ -1,8 +1,15 @@
 import React from 'react';
 import {Text, View, FlatList, StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
 import { BookCard } from '.';
 import { COLORS, FONTS } from '../constants';
 
+
+const StyledBookSections = styled.View`
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+`;
 
 const SectionHeaders = ({header}) => {
     if(header === "in progress") {
@@ -119,7 +126,7 @@ const BookList = ({ bookshelf, navigation }) => {
     <View style={{alignSelf: 'center'}}>
         <View style={styles.listContainer}>
             <SectionHeaders header={"in progress"}/>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+            <StyledBookSections>
                 {inProgressBooks.length ? (
                     inProgressBooks.map((item, i) => {
                         item = item.book;
@@ -132,32 +139,38 @@ const BookList = ({ bookshelf, navigation }) => {
                         )
                     })
                 ) : <View></View>}
-            </View>
+                { inProgressBooks.length !== 0 && (inProgressBooks.length - 2) % 3 === 0 ? <View style={{ width: 128 * .85, height: 192 * .85 }}/> : <View/> }
+            </StyledBookSections>
             {inProgressBooks.length ? <View></View> : <SectionEmpty header={"in progress"}/>}
         </View>
         <View style={styles.listContainer}>
             <SectionHeaders header={"to read"}/>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}>
-                {toReadBooks.length ? (
-                toReadBooks.map((item, i) => {
-                    item = item.book;
-                    return (
-                        <BookCard 
-                            image={item.volumeInfo.imageLinks} 
-                            onPress={() => navigation.navigate('BookDetails', {item})} 
-                            key={item.id}
-                        />
-                    )
-                })
-            ) : <View/>}
-            </View>
+            <StyledBookSections>
+                {   
+                    
+                    toReadBooks.length ? (
+                        toReadBooks.map((item, i) => {
+                            item = item.book;
+                            return (
+                                <BookCard 
+                                    image={item.volumeInfo.imageLinks} 
+                                    onPress={() => navigation.navigate('BookDetails', {item})} 
+                                    key={item.id}
+                                />
+                            )
+                        })
+                    ) : <View/>
+                }
+                { toReadBooks.length !== 0 && (toReadBooks.length - 2) % 3 === 0 ? <View style={{ width: 128 * .85, height: 192 * .85 }}/> : <View/> }
+               
+            </StyledBookSections>
 
             {toReadBooks.length ? <View></View> : <SectionEmpty header={"to read"}/>}
             
         </View>
         <View style={styles.listContainer}>
             <SectionHeaders header={"finished"}/>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between'}}>
+            <StyledBookSections>
                 {finishedBooks.length ? (
                     finishedBooks.map((item, i) => {
                         item = item.book;
@@ -170,7 +183,8 @@ const BookList = ({ bookshelf, navigation }) => {
                         )
                     })
                 ) : <View/>}
-            </View>
+                { finishedBooks.length !== 0 && (finishedBooks.length - 2) % 3 === 0 ? <View style={{ width: 128 * .85, height: 192 * .85 }}/> : <View/> }
+            </StyledBookSections>
 
             {finishedBooks.length ? <View></View> : <SectionEmpty header={"finished"}/>}
         </View>

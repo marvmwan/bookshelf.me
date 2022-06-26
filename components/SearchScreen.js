@@ -207,6 +207,7 @@ const SearchScreen = ({ onPress, navigation }) => {
                             onChange(text)
                         }}
                         clearButtonMode={'always'}
+                        onSubmitEditing={() => console.log()}
                     />
                     <View style={{justifyContent: 'center', alignItems: 'center', flex: .15, marginLeft: 5}}>
                         <TouchableOpacity onPress={onPress} activeOpacity={1}><Text>Cancel</Text></TouchableOpacity>
