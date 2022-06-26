@@ -7,13 +7,13 @@ import { FONTS, COLORS, icons, SIZES } from '../constants'
 import SearchCard from './SearchCard';
 
 
-const debounce = (fn, delay) => {
-    let timerId;
-    return (...args) => {
-        clearTimeout(timerId);
-        timerId = setTimeout(fn, delay, [...args]);
-    };
-};
+// const debounce = (fn, delay) => {
+//     let timerId;
+//     return (...args) => {
+//         clearTimeout(timerId);
+//         timerId = setTimeout(fn, delay, [...args]);
+//     };
+// };
 
 
 
@@ -48,7 +48,7 @@ const Banner = (textSearch) => {
 }
 
 
-let cancelToken;
+// let cancelToken;
 
 let tokenSource;
 
@@ -192,7 +192,6 @@ const SearchScreen = ({ onPress, navigation }) => {
                 <View
                     style={{
                         top: 60, 
-                        // marginLeft: 14.7,
                         width: SIZES.width*.95,
                         flexDirection: 'row',
                         alignSelf: 'center'
