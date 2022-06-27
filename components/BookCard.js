@@ -17,8 +17,6 @@ const BookCard = ({ onPress, image }) => {
                 borderRadius: 10,
                 width: 128 * .85,
                 height: 192 * .85,
-                // width: 148*(1.15),
-                // height: 215*(1.15),
                 marginBottom: 17.6,
                 shadowColor: '#000000',
                 shadowOffset: {width: 0, height: 4},
@@ -31,8 +29,6 @@ const BookCard = ({ onPress, image }) => {
             <Image 
                 style={{
                     borderRadius: 10,
-                    // width: 148*(1.15),
-                    // height: 215*(1.15),
                     width: 128 * .85,
                     height: 192 * .85,
                 }}

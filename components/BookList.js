@@ -56,7 +56,6 @@ const SectionHeaders = ({header}) => {
         return (
             <Text
                 style={{
-                    //marginLeft: 12.5,
                     ...FONTS.h1,
                     color: COLORS.blue
                 }}

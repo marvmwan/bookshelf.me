@@ -67,7 +67,6 @@ const EmptyBookshelf = () => {
 const Home = ({ navigation }) => {
 
     const [searchOn, setSearchOn] = useState(false);
-    //const [fontsLoaded, setFontsLoaded] = useState(false);
 
     const bookshelf = useSelector((state) => state.bookReducer.bookshelf);
 
@@ -94,7 +93,19 @@ const Home = ({ navigation }) => {
                     />
                     <Header navigation={navigation} onPress={() => setSearchOn(true)}/>
                     {bookshelf.length ? <BookList bookshelf={bookshelf} navigation={navigation}/> : <EmptyBookshelf/>}
-                
+                    <View
+                        style={{
+                            alignItems: 'center',
+                            marginBottom: 30,
+                            marginTop: 60
+                        }}
+                    >
+                        <Text 
+                            style={{ ...FONTS.body2 }}
+                        >
+                            made by <Text style={{textDecorationLine: 'line-through'}}>mbogo</Text>
+                        </Text>
+                    </View>
                 </ScrollView>
                 <AddButton onPress={() => {setSearchOn(true)}} />
             </View>  

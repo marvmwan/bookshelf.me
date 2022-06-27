@@ -28,21 +28,10 @@ const SearchList = ( {books} ) => {
                 style={{marginTop: 100}}
                 data={books}
                 renderItem={({item, index, separators}) => {<SearchCard item={item}/>}}
-                //ItemSeparatorComponent={({ highlighted }) => (<ItemSeparator/>) }
                 numColumns={1}
                 keyExtractor={( item ) => item.id}
                 ListHeaderComponent={<SectionHeaders header={"All books"}/>}
-                />           
-            {/* <FlatList
-                data={books}
-                renderItem={({ item }) => <BookCard image={item.cover} onPress={() => {console.log("Navigate to Book Detail View")}}  /> }
-                numColumns={2}
-                keyExtractor={( item ) => item.id}
-                ListHeaderComponent={<SectionHeaders header={header}/>}
-                style={{
-                    alignSelf: 'center'
-                }}
-            /> */}
+                />
         </View>
         )
         

@@ -17,7 +17,7 @@ import Button from '../components/Button';
 import ButtonWithImage from '../components/ButtonWithImage';
 import CategoryTag from '../components/CategoryTag';
 
-import { COLORS, FONTS, icons } from '../constants';
+import { COLORS, FONTS, icons, SIZES } from '../constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { addBook, deleteBook, startBook, finishBook } from '../store/actions/book';
 
@@ -109,13 +109,12 @@ const BookDetails = ({navigation, route }) => {
     return (
         <>
         <View style={{flex: 1, backgroundColor: COLORS.white}}>
-            <ScrollView contentContainerStyle={{alignSelf: 'center', width: 323}}>
+            <ScrollView contentContainerStyle={{alignSelf: 'center', width: SIZES.width * .8}}>
                 <StatusBar
                     animated={true}
                     backgroundColor="#61dafb"
                     barStyle={'dark-content'}
                     showHideTransition={'fade'}
-                    //hidden={hidden} 
                 />
                 <View style={{flex:.1, marginBottom: 40}}>
                     <BackButton navigation={navigation} style={{marginLeft: -10, marginTop: 60}}/>
@@ -150,8 +149,6 @@ const BookDetails = ({navigation, route }) => {
                             (bookshelf.find(x => x.id === bookID).finished ?
                                 <Button text={'Finished!'} onPress={() => console.log('finished!')} color={{backgroundColor: '#2ED348'}} /> :
                                 <Button text={'Finish book'} onPress={() => finish(fullBook)} color={{backgroundColor: '#2ED348'}} />))}
-
-                    {/* <Button text={'Add book +'} color={{backgroundColor: COLORS.blue }} onPress={() => console.log('add book +')}/> */}
                     <ButtonWithImage text={'Buy now'} icon={icons.externalLink} onPress={() => WebBrowser.openBrowserAsync('https://www.amazon.com/s?k=' + ISBN)} />
                 </View>
 

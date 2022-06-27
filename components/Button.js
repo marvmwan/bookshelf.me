@@ -5,7 +5,6 @@ import { TouchableOpacity, Image, View, Text, StyleSheet } from "react-native";
 import { icons, FONTS, COLORS } from '../constants'
 
 const Button = ({onPress, text, color}) => {
-    //const style = {backgroundColor: '#2ED348'};
     return (
         <View style={{padding: 0}}>
             <TouchableOpacity 
@@ -16,9 +15,6 @@ const Button = ({onPress, text, color}) => {
                 <Text style={styles.text}>{text}</Text>
             </TouchableOpacity>
         </View>
-            
-        
-        
     )
 }
 
@@ -27,13 +23,11 @@ const styles = StyleSheet.create({
     text: {
         ...FONTS.body1,
         color: COLORS.white,
-        //alignSelf: 'center',
         lineHeight: 22
     
     },
     button: {
         borderRadius: 20, 
-        //backgroundColor: COLORS.blue,
         height: 42, 
         width: 150,
         justifyContent: 'center',

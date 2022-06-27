@@ -1,8 +1,9 @@
+import { size } from 'lodash';
 import React from 'react';
 import { TouchableOpacity, Image, View } from "react-native";
 
 
-import { icons, FONTS, COLORS } from '../constants'
+import { icons, FONTS, COLORS, SIZES } from '../constants'
 
 const AddButton = ({onPress}) => {
     return (
@@ -14,8 +15,8 @@ const AddButton = ({onPress}) => {
                     height: 72, 
                     width: 72,
                     position: 'absolute',
-                    top: 730,
-                    left: 300,
+                    top: SIZES.height - 120,
+                    left: SIZES.width - 100,
                     justifyContent: 'center',
                     alignItems: 'center',
                     shadowColor: '#959DA5',

@@ -1,20 +1,10 @@
 import axios from 'axios';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import { View, TouchableOpacity, Text, StatusBar, StyleSheet, TextInput, FlatList } from 'react-native';
 
 import { FONTS, COLORS, icons, SIZES } from '../constants'
 import SearchCard from './SearchCard';
-
-
-// const debounce = (fn, delay) => {
-//     let timerId;
-//     return (...args) => {
-//         clearTimeout(timerId);
-//         timerId = setTimeout(fn, delay, [...args]);
-//     };
-// };
-
 
 
 const SectionHeaders = ({header}) => {
@@ -31,24 +21,31 @@ const SectionHeaders = ({header}) => {
 }
 
 
-const Banner = (textSearch) => {
-    if(textSearch.searchBox == ''){
+const LoadingBanner = () => {
+    return (
+        <View style={{alignSelf: 'center', marginTop: 150, width: '90%'}} >
+            <Text style={{...FONTS.largeTitle, color: '#4A4A4A', textAlign: 'center'}}> Loading...🕵️‍♂️</Text>
+        </View>
+    )
+}
+
+const SearchResultsBanner = ({query}) => {
+    if(query === ''){
         return (
-            <View style={{alignSelf: 'center', marginTop: 150}}>
-                <Text style={{...FONTS.largeTitle, color: '#4A4A4A'}} >Find your favorite books here 🔎</Text>
+            <View style={{alignSelf: 'center', marginTop: 150, width: '90%'}}>
+                <Text style={{...FONTS.largeTitle, color: '#4A4A4A', textAlign: 'center'}} >Find your favorite books here 🔎</Text>
             </View>
         )
     } else {
         return (
-            <View style={{alignSelf: 'center', marginTop: 150}} >
-                <Text style={{...FONTS.largeTitle, color: '#4A4A4A'}}> Loading...🕵️‍♂️</Text>
+            <View style={{alignSelf: 'center', marginTop: 150, width: '90%'}}>
+                <Text style={{...FONTS.largeTitle, color: '#4A4A4A', textAlign: 'center'}} >No results found 🤕</Text>
             </View>
         )
     }
+        
 }
 
-
-// let cancelToken;
 
 let tokenSource;
 
@@ -56,15 +53,27 @@ const SearchScreen = ({ onPress, navigation }) => {
 
     const [textSearch, setTextSearch] = useState('');
     const [searchQuery, setSearchQuery] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [books, setBooks] = useState([]);
     const [errorMsg, setErrorMsg] = useState('');
+    const [mounted, setMounted] = useState(false);
+    const [noResults, setNoResults] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+
+        return () => {
+          setMounted(false); // This worked for me
+        };
+    }, []);
     
     
     const onChange = (query) => {
-        setTextSearch(query);
+        if(mounted){
+            setTextSearch(query);
+        }
         
-        //setIsLoading(true);
+        
         const search = _.debounce(sendQuery, 500);
 
         setSearchQuery(prevSearch => {
@@ -75,55 +84,39 @@ const SearchScreen = ({ onPress, navigation }) => {
         });
     
         search(query);
-        //setIsLoading(false);
       };
     
     const sendQuery = async value => {
-        setIsLoading(true);
+        if(mounted){
+            setIsLoading(true);
+        }
+        
         const { cancelPrevQuery, result } = await fetchData(value);
 
         if (cancelPrevQuery) return;
 
         if (result !== undefined) {
-            setBooks(result);
-            setErrorMsg('');
-            setIsLoading(false);
+            if(mounted && result.totalItems > 0){
+                setBooks(result.items);
+                setErrorMsg('');
+                setIsLoading(false);
+                setNoResults(false); 
+            } else {
+                setBooks([]);
+                setErrorMsg('');
+                setNoResults(true);
+                setIsLoading(false);
+            }
         } else {
-            setBooks([]);
-            setErrorMsg("There was an error. Try again");
-            console.log(errorMsg);
-            setIsLoading(false);
+            if(mounted){
+                setBooks([]);
+                setErrorMsg("There was an error 😅. Try again");
+                setIsLoading(false);
+            }
         }
     };
 
-    // const fetchData = (query) => {
-    // setIsLoading(true);
-    // setTextSearch(query);
-    // if(query == ''){
-    //     return;
-    // }
-    // const searchTerm = query;
-
-    // try {
-    //     const results =  await axios.get(
-    //         `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&printType=books&key=${API_KEY}`
-    //     )
-    //     .then( response => {
-    //         //console.log(response);
-    //         setBooks(response.data.items)
-    //     })
-    //     //console.log("Results for " + searchTerm + ": ", results.data)
-    // } catch (error) {
-    //     console.log(error);
-    //     setErrorMsg("There was an error. Try again");
-    // }
-    // setIsLoading(false);
-
-
-    // }
-
     const fetchData = async keyword => {
-        setTextSearch(keyword);
         try {
             if (typeof tokenSource !== typeof undefined) {
             tokenSource.cancel('Operation canceled due to new request.');
@@ -136,46 +129,12 @@ const SearchScreen = ({ onPress, navigation }) => {
             cancelToken: tokenSource.token
             });
 
-            return { result: data.items };
+            return { result: data };
         } catch (err) {
             if (axios.isCancel(err)) return { cancelPrevQuery: true };
             return [err];
         }
     };
-    // const handleSearchChange = debounce( async (query) => {
-    //     setIsLoading(true);
-    //     setTextSearch(query);
-    //     if(query == ''){
-    //         return;
-    //     }
-    //     const searchTerm = query;
-
-
-    //     //Check if there are any previous pending requests
-    //     if (cancelToken != undefined) {
-    //         console.log('api call canceled');
-    //         cancelToken.cancel("Operation canceled due to new request.");
-    //     }
-
-    //     //Save the cancel token for the current request
-    //     cancelToken = axios.CancelToken.source()
-
-
-    //     try {
-    //         const results =  await axios.get(
-    //             `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&printType=books&key=AIzaSyCiQS2OJqWvr2_ysbwwnh_l0r_hj5Lp0ic`,
-    //             { cancelToken: cancelToken.token } //Pass the cancel token to the current request
-    //         )
-    //         .then( response => {
-    //             //console.log(response);
-    //             setBooks(response.data.items)
-    //         })
-    //         //console.log("Results for " + searchTerm + ": ", results.data)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    //     setIsLoading(false);
-    // }, 400)
 
 
 
@@ -186,7 +145,6 @@ const SearchScreen = ({ onPress, navigation }) => {
                 backgroundColor="#61dafb"
                 barStyle={'dark-content'}
                 showHideTransition={'fade'}
-                //hidden={hidden} 
             />
             <View style={{backgroundColor: 'rgba(240,240,240, 0.87)', height: 110, alignSelf: 'center', width: SIZES.width}}>
                 <View
@@ -214,13 +172,13 @@ const SearchScreen = ({ onPress, navigation }) => {
                 </View>
             </View>
 
-            {isLoading ? (<Banner searchBox={textSearch}/>) : (
+            {isLoading ? (<LoadingBanner/>) : (noResults || textSearch === '') ? (<SearchResultsBanner query={textSearch}/>) : (
                 <FlatList
                 style={{marginTop: 7}}
                 contentContainerStyle={{alignSelf:'center'}}
                 data={books}
                 renderItem={({item}) => <SearchCard item={item} arrow={icons.greyNext} navigation={navigation}/>}
-                ListEmptyComponent={<View style={{width: SIZES.width*.9}}><Banner searchBox={textSearch}/></View>}
+                //ListEmptyComponent={<View style={{width: SIZES.width*.9}}><Banner searchBox={textSearch}/></View>}
                 keyExtractor={( item ) => item.id}
                 ListHeaderComponent={<SectionHeaders header={books.length !== 0 ? "All books" : ''}/>}
                 />
