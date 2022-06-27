@@ -4,7 +4,11 @@ import { TouchableOpacity, Image } from "react-native"
 
 const BookCard = ({ onPress, image }) => {
     const gradient = 'https://gradients.mijo-design.com/public/uploads/files/z12.png';
-    const regThumbnail = image ? image.thumbnail : gradient;
+    let regThumbnail = image ? image.thumbnail : gradient;
+
+    if(regThumbnail !== gradient){
+        regThumbnail = regThumbnail.replace('zoom=1', 'zoom=2');
+    }
 
 
     return (

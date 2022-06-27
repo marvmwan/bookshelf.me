@@ -16,8 +16,17 @@ const SearchCard = ( {item, navigation, arrow} ) => {
     const title = book.title == undefined ? "Title not available" : book.title;
     const author = book.authors == undefined ? "Author not available" : book.authors[0];
     const averageRating = book.averageRating == undefined ? "" : book.averageRating;
-    const smallThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.smallThumbnail;
-    const regThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.thumbnail;
+    let smallThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.smallThumbnail;
+    let regThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.thumbnail;
+
+    if(regThumbnail !== gradient){
+        regThumbnail = regThumbnail.replace('zoom=1', 'zoom=2');
+    }
+
+    if(smallThumbnail !== gradient){
+        smallThumbnail = smallThumbnail.replace("zoom=5", "zoom=7");
+    }
+
     const ratingsCount = book.ratingsCount == undefined ? "" : book.ratingsCount;
 
 

@@ -17,8 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.mbogo.bookshelf"
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {

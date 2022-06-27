@@ -50,8 +50,16 @@ const BookDetails = ({navigation, route }) => {
     const description = book.description == undefined ? "Description not available" : book.description;
     const categories = book.categories == undefined ? "Categories not available" : book.categories;
     const averageRating = book.averageRating == undefined ? "" : book.averageRating;
-    const smallThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.smallThumbnail;
-    const regThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.thumbnail;
+    let smallThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.smallThumbnail;
+    let regThumbnail = book.imageLinks == undefined ? gradient : book.imageLinks.thumbnail;
+
+    if(regThumbnail !== gradient){
+        regThumbnail = regThumbnail.replace('zoom=1', 'zoom=2');
+    }
+
+    if(smallThumbnail !== gradient){
+        smallThumbnail = smallThumbnail.replace("zoom=5", "zoom=7");
+    }
     const ratingsCount = book.ratingsCount == undefined ? "0" : book.ratingsCount;
     const pageCount = book.pageCount == undefined ? "Unknown" : book.pageCount;
     const ISBN = book.industryIdentifiers == undefined ? "Unknown" : book.industryIdentifiers[0].identifier;
@@ -120,7 +128,7 @@ const BookDetails = ({navigation, route }) => {
                                 uri: smallThumbnail
                             }}
                             style={styles.thumbnail}
-                            resizeMode='stretch'
+                        
                         />
                     </View>
                     <View style={{marginLeft: 30, marginBottom: 50, width:180}}>
@@ -258,6 +266,7 @@ const styles = StyleSheet.create({
         height: 171,
         borderRadius: 10,
         alignSelf: 'center',
+        resizeMode: 'cover'
         
     },
     thumbnailContainer: {
