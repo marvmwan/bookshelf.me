@@ -5,6 +5,7 @@ import { View, TouchableOpacity, Text, StatusBar, StyleSheet, TextInput, FlatLis
 
 import { FONTS, COLORS, icons, SIZES } from '../constants'
 import SearchCard from './SearchCard';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 const SectionHeaders = ({header}) => {
@@ -158,12 +159,13 @@ const SearchScreen = ({ onPress, navigation }) => {
                     <TextInput
                         style={styles.searchBox}
                         placeholder='Search books, authors, etc...'
+                        placeholderTextColor={COLORS.gray}
                         autoFocus
                         onChangeText={(text) => {
                             text = text.split(' ').join('+');
                             onChange(text)
                         }}
-                        clearButtonMode={'always'}
+                        clearButtonMode='always'
                         onSubmitEditing={() => console.log()}
                     />
                     <View style={{justifyContent: 'center', alignItems: 'center', flex: .15, marginLeft: 5}}>
@@ -200,7 +202,8 @@ const SearchScreen = ({ onPress, navigation }) => {
         alignItems: 'center',
         flexDirection: 'row',
         paddingLeft: 10,
-        flex: .85
+        flex: .85,
+        
 
 
      }
